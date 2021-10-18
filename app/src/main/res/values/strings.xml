@@ -1,3 +1,24 @@
 <resources>
     <string name="app_name">Mobile Applications Assignment 2</string>
+    <string name="exit">Exit</string>
+    <string name="ok" translatable="false">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="notes">Notes</string>
+    <string name="my_notes">My Notes:</string>
+    <string name="my_rating">My Rating:</string>
+    <string name="movie_name">Movie Name</string>
+    <string name="_0_0" translatable="false">0.0</string>
+    <string name="movie_title">Movie Title</string>
+    <string name="year">Year</string>
+    <string name="genre">Genre</string>
+    <string name="plot">Plot</string>
+    <string name="imdb_rating">IMDB Rating</string>
+    <string name="back">Back</string>
+    <string name="rate">Rate</string>
+    <string name="Year">Year:</string>
+    <string name="Genre">Genre:</string>
+    <string name="Plot">Plot:</string>
+    <string name="Imdb_rating">IMDB Rating:</string>
+    <string name="User_rating">User Rating:</string>
+    <string name="User_notes">User Notes:</string>
 </resources>

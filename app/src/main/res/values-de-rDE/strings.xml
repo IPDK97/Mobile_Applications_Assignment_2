@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Mobile Applications Auftrag 2</string>
+    <string name="exit">Schliessen</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="notes">Notizen</string>
+    <string name="my_notes">Meine Notizen:</string>
+    <string name="my_rating">Meine Bewertung:</string>
+    <string name="movie_name">Filmname</string>
+    <string name="movie_title">Filmtitel</string>
+    <string name="year">Jahr</string>
+    <string name="genre">Genre</string>
+    <string name="plot">Plot</string>
+    <string name="imdb_rating">IMDB Bewertung</string>
+    <string name="back">Zurück</string>
+    <string name="rate">Bewerten</string>
+    <string name="Year">Jahr:</string>
+    <string name="Genre">Genre:</string>
+    <string name="Plot">Plot:</string>
+    <string name="Imdb_rating">IMDB Bewertung:</string>
+    <string name="User_rating">Benutzerbewertung:</string>
+    <string name="User_notes">Benutzernotizen:</string>
+</resources>
