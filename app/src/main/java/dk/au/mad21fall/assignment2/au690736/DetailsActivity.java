@@ -5,14 +5,22 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+
+import dk.au.mad21fall.assignment2.au690736.model.Movie;
+import dk.au.mad21fall.assignment2.au690736.viewmodel.DetailsViewModel;
 
 public class DetailsActivity extends AppCompatActivity {
 
     private Movie movie;
+    private DetailsViewModel model;
+    CharSequence text = "Successfully deleted";
+    int duration = Toast.LENGTH_SHORT;
 
     ImageView imgGenre;
     TextView txtName;
@@ -24,19 +32,12 @@ public class DetailsActivity extends AppCompatActivity {
     TextView txtUserNotes;
     Button btnRate;
     Button btnBack;
+    Button btnDelete;
 
     // Code inspired by Example Code from the labs
     private final ActivityResultLauncher<Intent> launcher = registerForActivityResult(
-        new ActivityResultContracts.StartActivityForResult(),
-        result -> {
-            if(result.getResultCode() == RESULT_OK) {
-                Intent data = result.getData();
-                setResult(RESULT_OK, data);
-            } else {
-                setResult(RESULT_CANCELED);
-            }
-            finish();
-        }
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> finish()
     );
 
     @Override
@@ -44,7 +45,10 @@ public class DetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
-        this.movie = (Movie) getIntent().getSerializableExtra("serializable");
+        model = new ViewModelProvider(this).get(DetailsViewModel.class);
+        model.setMovie(getIntent().getIntExtra("id", 0));
+
+        movie = model.getMovie();
         initializeViews();
 
         btnRate = findViewById(R.id.rate);
@@ -52,6 +56,9 @@ public class DetailsActivity extends AppCompatActivity {
 
         btnBack = findViewById(R.id.back);
         btnBack.setOnClickListener(v -> finish());
+
+        btnDelete = findViewById(R.id.delete);
+        btnDelete.setOnClickListener(v -> deleteMovie());
     }
 
     private void initializeViews() {
@@ -91,6 +98,9 @@ public class DetailsActivity extends AppCompatActivity {
             case "Western":
                 imgGenre.setImageResource(R.drawable.ic_western);
                 break;
+            case "Adventure":
+                imgGenre.setImageResource(R.drawable.ic_adventure);
+                break;
             default:
                 imgGenre.setImageResource(R.drawable.ic_resource_default);
                 break;
@@ -99,9 +109,15 @@ public class DetailsActivity extends AppCompatActivity {
 
     private void openEditActivity() {
         Intent intent = new Intent(this,EditActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("serializable", movie);
-        intent.putExtras(bundle);
+        intent.putExtra("id", movie.getUid());
         launcher.launch(intent);
+    }
+
+    private void deleteMovie() {
+        model.deleteMovie(movie);
+        // Toast Code inspired by https://developer.android.com/guide/topics/ui/notifiers/toasts
+        Toast toast = Toast.makeText(getApplicationContext(), text, duration);
+        toast.show();
+        finish();
     }
 }

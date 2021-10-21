@@ -1,96 +1,80 @@
 package dk.au.mad21fall.assignment2.au690736;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
+import android.widget.SearchView;
+import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.util.List;
+
+import dk.au.mad21fall.assignment2.au690736.model.Movie;
+import dk.au.mad21fall.assignment2.au690736.model.MovieAdapter;
+import dk.au.mad21fall.assignment2.au690736.model.Search;
+import dk.au.mad21fall.assignment2.au690736.model.SearchResult;
+import dk.au.mad21fall.assignment2.au690736.service.NotificationService;
+import dk.au.mad21fall.assignment2.au690736.viewmodel.ListViewModel;
 
 public class ListActivity extends AppCompatActivity implements MovieAdapter.IMovieItemClickedListener {
 
-    private ArrayList<Movie> movies;
-    private MovieAdapter adapter;
-    private MovieListViewModel model;
+    private ListViewModel model;
+
+    RequestQueue queue;
+    static final String API_KEY = "25bc54a2";
+    String searchBase = "https://www.omdbapi.com/?apikey=" + API_KEY + "&s=";
+    String base = "https://www.omdbapi.com/?apikey=" + API_KEY + "&t=";
+
+    CharSequence textSuccessful = "Successfully added";
+    CharSequence textExists = "Movie already exists";
+    int duration = Toast.LENGTH_SHORT;
 
     Button btnExit;
-
-    // Code inspired by Example Code from the labs
-    private final ActivityResultLauncher<Intent> launcher = registerForActivityResult(
-        new ActivityResultContracts.StartActivityForResult(),
-        result -> {
-            if(result.getResultCode() == RESULT_OK) {
-                Intent data = result.getData();
-                assert data != null;
-                Movie movie = (Movie) data.getSerializableExtra("result");
-                movies = model.getMovieList().getValue();
-                if(movie != null && movies != null) {
-                    movies.set(movie.getPosition(), movie);
-                    adapter.updateMovieList(movies);
-                    model.setMovieList(movies);
-                }
-            }
-        }
-    );
+    Button btnAdd;
+    SearchView search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-        adapter = new MovieAdapter(this);
+        model = new ViewModelProvider(this).get(ListViewModel.class);
+
+        MovieAdapter adapter = new MovieAdapter(this);
         RecyclerView rcvList = findViewById(R.id.movieList);
         rcvList.setLayoutManager(new LinearLayoutManager(this));
         rcvList.setAdapter(adapter);
 
-        createMovieList();
+        model.getMovieList().observe(this, adapter::updateMovieList);
 
-        if(model == null) {
-            model = new ViewModelProvider(this).get(MovieListViewModel.class);
-        }
+        search = findViewById(R.id.search);
 
-        if(model.getMovieList() == null) {
-            model.setMovieList(movies);
-        }
-
-        model.getMovieList().observe(this, movieList -> adapter.updateMovieList(movieList));
+        btnAdd = findViewById(R.id.add);
+        btnAdd.setOnClickListener(v -> addMovie());
 
         btnExit = findViewById(R.id.exit);
         btnExit.setOnClickListener(v -> exitApp());
+
+        startNotificationService();
     }
 
-    //Import Data from CSV file
-    private void createMovieList() {
-        movies = new ArrayList<>();
-        try {
-            // CSV read inspired by https://www.youtube.com/watch?v=i-TqNzUryn8
-            InputStream inputStream = getResources().openRawResource(R.raw.movie_data);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-            int i = 0;
-            String line;
-            while ((line = reader.readLine()) != null) {
-                // Skip first line
-                if(i == 0) {
-                    i = 1;
-                    continue;
-                }
-                String[] records = line.split(",");
-                movies.add(new Movie(records[0], records[1], Integer.parseInt(records[2]), Double.parseDouble(records[3]), records[4]));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void addMovie() {
+        String query = String.valueOf(search.getQuery());
+        sendSearchRequest(searchBase + query);
     }
 
     private void exitApp() {
@@ -99,14 +83,77 @@ public class ListActivity extends AppCompatActivity implements MovieAdapter.IMov
     }
 
     @Override
-    public void onMovieClicked(int index) {
-        Movie data = model.getMovieList().getValue().get(index);
-        data.setPosition(index);
-        movies.set(index, data);
-        Intent intent = new Intent(this,DetailsActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("serializable", movies.get(index));
-        intent.putExtras(bundle);
-        launcher.launch(intent);
+    public void onMovieClicked(Movie movie) {
+        Intent intent = new Intent(this, DetailsActivity.class);
+        intent.putExtra("id", movie.getUid());
+        startActivity(intent);
+    }
+
+    private void startNotificationService() {
+        Intent intent = new Intent(this, NotificationService.class);
+        startService(intent);
+    }
+
+    private void sendRequest(String url){
+        if(queue==null) {
+            queue = Volley.newRequestQueue(getApplication().getApplicationContext());
+        }
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                response -> {
+                    Log.d(TAG, "onResponse: " + response);
+                    parseJson(response);
+                }, error -> Log.e(TAG, "That did not work!", error));
+
+        queue.add(stringRequest);
+    }
+
+    private void sendSearchRequest(String url){
+        if(queue==null) {
+            queue = Volley.newRequestQueue(getApplication().getApplicationContext());
+        }
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                response -> {
+                    Log.d(TAG, "onResponse: " + response);
+                    parseSearchResultsJson(response);
+                }, error -> Log.e(TAG, "That did not work!", error));
+
+        queue.add(stringRequest);
+    }
+
+    private void parseSearchResultsJson(String json) {
+        Gson gson = new GsonBuilder().create();
+        Search search = gson.fromJson(json, Search.class);
+
+        List<SearchResult> list = search.getSearch();
+        sendRequest(base + list.get(0).getTitle());
+    }
+
+    private void parseJson(String json) {
+        Gson gson = new GsonBuilder().create();
+        Movie movie = gson.fromJson(json, Movie.class);
+
+        // Get the first Genre from the Genre Field and remove the others
+        if(movie!=null) {
+            String genre = movie.getGenre();
+            if(movie.getGenre().contains(",")) {
+                genre = genre.substring(0,movie.getGenre().indexOf(","));
+                movie.setGenre(genre);
+            }
+        }
+
+        if (movie != null) {
+            if(model.getMovie(movie.getName()) == null) {
+                model.addMovie(movie);
+                // Toast Code inspired by https://developer.android.com/guide/topics/ui/notifiers/toasts
+                Toast toast = Toast.makeText(getApplicationContext(), textSuccessful, duration);
+                toast.show();
+            } else {
+                // Toast Code inspired by https://developer.android.com/guide/topics/ui/notifiers/toasts
+                Toast toast = Toast.makeText(getApplicationContext(), textExists, duration);
+                toast.show();
+            }
+        }
     }
 }

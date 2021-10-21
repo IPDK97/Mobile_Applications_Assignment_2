@@ -9,9 +9,11 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/movieList"
         android:layout_width="0dp"
-        android:layout_height="617dp"
+        android:layout_height="549dp"
         android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
         android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -23,12 +25,34 @@
         style="@style/Widget.AppCompat.Button"
         android:layout_width="127dp"
         android:layout_height="49dp"
-        android:layout_marginStart="142dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="142dp"
-        android:layout_marginBottom="35dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="5dp"
         android:text="@string/exit"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search" />
+
+    <Button
+        android:id="@+id/add"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="127dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
+        android:text="@string/add"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search" />
+
+    <SearchView
+        android:id="@+id/search"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/movieList" />

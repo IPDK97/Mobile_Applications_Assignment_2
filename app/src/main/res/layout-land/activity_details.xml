@@ -6,15 +6,30 @@
     android:layout_height="match_parent"
     tools:context="dk.au.mad21fall.assignment2.au690736.DetailsActivity">
 
+    <Button
+        android:id="@+id/delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/delete"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/rate"
+        app:layout_constraintStart_toEndOf="@+id/back" />
+
     <TextView
         android:id="@+id/movieTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="5dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
         android:text="@string/movie_title"
-        android:textSize="34sp"
+        android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/genreImage"
@@ -25,9 +40,9 @@
         android:layout_width="57dp"
         android:layout_height="29dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:text="@string/year"
-        android:textSize="20sp"
+        android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/Year"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -37,7 +52,7 @@
         android:layout_height="29dp"
         android:layout_marginStart="10dp"
         android:text="@string/genre"
-        android:textSize="20sp"
+        android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/Genre"
         app:layout_constraintTop_toBottomOf="@+id/year" />
 
@@ -52,11 +67,11 @@
 
     <TextView
         android:id="@+id/plot"
-        android:layout_width="312dp"
+        android:layout_width="380dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:text="@string/plot"
-        android:textSize="20sp"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Plot" />
 
@@ -65,9 +80,9 @@
         android:layout_width="75dp"
         android:layout_height="29dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:text="@string/imdb_rating"
-        android:textSize="20sp"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/ImdbRating"
         app:layout_constraintTop_toBottomOf="@+id/genreImage" />
@@ -77,18 +92,21 @@
         android:layout_width="75dp"
         android:layout_height="29dp"
         android:layout_marginStart="10dp"
-        android:textSize="20sp"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/UserRating"
         app:layout_constraintTop_toBottomOf="@+id/imdbRating" />
 
     <TextView
         android:id="@+id/userNotes"
-        android:layout_width="414dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
         android:layout_marginTop="5dp"
-        android:textSize="20sp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/plot"
         app:layout_constraintTop_toBottomOf="@+id/UserNotes" />
 
@@ -117,9 +135,9 @@
         android:layout_width="60dp"
         android:layout_height="29dp"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:text="@string/Year"
-        android:textSize="20sp"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -129,7 +147,7 @@
         android:layout_height="29dp"
         android:layout_marginStart="30dp"
         android:text="@string/Genre"
-        android:textSize="20sp"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Year" />
 
@@ -139,29 +157,29 @@
         android:layout_height="29dp"
         android:layout_marginStart="30dp"
         android:text="@string/Plot"
-        android:textSize="20sp"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Genre" />
 
     <TextView
         android:id="@+id/ImdbRating"
-        android:layout_width="185dp"
+        android:layout_width="wrap_content"
         android:layout_height="29dp"
         android:layout_marginStart="25dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:text="@string/Imdb_rating"
-        android:textSize="20sp"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/plot"
         app:layout_constraintTop_toBottomOf="@+id/genreImage" />
 
     <TextView
         android:id="@+id/UserRating"
-        android:layout_width="185dp"
+        android:layout_width="wrap_content"
         android:layout_height="29dp"
         android:layout_marginStart="25dp"
         android:text="@string/User_rating"
-        android:textSize="20sp"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/plot"
         app:layout_constraintTop_toBottomOf="@+id/ImdbRating" />
@@ -172,7 +190,7 @@
         android:layout_height="29dp"
         android:layout_marginStart="25dp"
         android:text="@string/User_notes"
-        android:textSize="20sp"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/plot"
         app:layout_constraintTop_toBottomOf="@+id/UserRating" />

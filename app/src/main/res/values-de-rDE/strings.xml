@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Mobile Applications Auftrag 2</string>
+    <string name="app_name">au690736 Movies</string>
     <string name="exit">Schliessen</string>
     <string name="cancel">Abbrechen</string>
     <string name="notes">Notizen</string>
@@ -20,4 +20,6 @@
     <string name="Imdb_rating">IMDB Bewertung:</string>
     <string name="User_rating">Benutzerbewertung:</string>
     <string name="User_notes">Benutzernotizen:</string>
+    <string name="add">Hinzufügen</string>
+    <string name="delete">Löschen</string>
 </resources>

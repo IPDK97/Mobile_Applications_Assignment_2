@@ -1,4 +1,4 @@
-package dk.au.mad21fall.assignment2.au690736;
+package dk.au.mad21fall.assignment2.au690736.model;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
@@ -10,24 +10,26 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
+import java.util.List;
+
+import dk.au.mad21fall.assignment2.au690736.R;
 
 // Recycler View built using demo-code from the labs
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
     public interface IMovieItemClickedListener{
-        void onMovieClicked(int index);
+        void onMovieClicked(Movie movie);
     }
 
     private final IMovieItemClickedListener listener;
-    private ArrayList<Movie> movieList;
+    private List<Movie> movieList;
 
     public MovieAdapter(IMovieItemClickedListener listener){
         this.listener = listener;
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void updateMovieList(ArrayList<Movie> lists){
+    public void updateMovieList(List<Movie> lists){
         movieList = lists;
         notifyDataSetChanged();
     }
@@ -65,6 +67,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             case "Western":
                 holder.imgIcon.setImageResource(R.drawable.ic_western);
                 break;
+            case "Adventure":
+                holder.imgIcon.setImageResource(R.drawable.ic_adventure);
+                break;
             default:
                 holder.imgIcon.setImageResource(R.drawable.ic_resource_default);
                 break;
@@ -73,17 +78,17 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public int getItemCount() {
-        return movieList.size();
+        return movieList == null ? 0 : movieList.size();
     }
 
-    public static class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView imgIcon;
         TextView txtName;
         TextView txtRating;
         TextView txtYear;
 
-        IMovieItemClickedListener listener;
+        private final IMovieItemClickedListener listener;
 
         public MovieViewHolder(@NonNull View itemView, IMovieItemClickedListener movieItemClickedListener) {
             super(itemView);
@@ -99,7 +104,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
         @Override
         public void onClick(View view) {
-            listener.onMovieClicked(getBindingAdapterPosition());
+            listener.onMovieClicked(movieList.get(getBindingAdapterPosition()));
         }
     }
 }

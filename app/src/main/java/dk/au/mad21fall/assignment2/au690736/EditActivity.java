@@ -1,6 +1,5 @@
 package dk.au.mad21fall.assignment2.au690736;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -8,10 +7,15 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+
+import dk.au.mad21fall.assignment2.au690736.model.Movie;
+import dk.au.mad21fall.assignment2.au690736.viewmodel.EditViewModel;
 
 public class EditActivity extends AppCompatActivity {
 
     private Movie movie;
+    private EditViewModel model;
 
     ImageView imgGenre;
     TextView txtName;
@@ -26,7 +30,10 @@ public class EditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
 
-        this.movie = (Movie) getIntent().getSerializableExtra("serializable");
+        model = new ViewModelProvider(this).get(EditViewModel.class);
+        model.setMovie(getIntent().getIntExtra("id", 0));
+
+        movie = model.getMovie();
         createEditPage();
     }
 
@@ -80,6 +87,9 @@ public class EditActivity extends AppCompatActivity {
             case "Western":
                 imgGenre.setImageResource(R.drawable.ic_western);
                 break;
+            case "Adventure":
+                imgGenre.setImageResource(R.drawable.ic_adventure);
+                break;
             default:
                 imgGenre.setImageResource(R.drawable.ic_resource_default);
                 break;
@@ -97,11 +107,7 @@ public class EditActivity extends AppCompatActivity {
     private void saveData() {
         movie.setNotes(txtNotes.getText().toString());
         movie.setUserRating(Double.parseDouble(txtRating.getText().toString()));
-        Intent returnData = new Intent();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("result", movie);
-        returnData.putExtras(bundle);
-        setResult(RESULT_OK, returnData);
+        model.updateMovie(movie);
         finish();
     }
 }
