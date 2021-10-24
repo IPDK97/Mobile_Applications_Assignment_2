@@ -41,6 +41,7 @@ public class ListActivity extends AppCompatActivity implements MovieAdapter.IMov
 
     CharSequence textSuccessful = "Successfully added";
     CharSequence textExists = "Movie already exists";
+    CharSequence textNotFound = "Movie does not exist";
     int duration = Toast.LENGTH_SHORT;
 
     Button btnExit;
@@ -126,8 +127,14 @@ public class ListActivity extends AppCompatActivity implements MovieAdapter.IMov
         Gson gson = new GsonBuilder().create();
         Search search = gson.fromJson(json, Search.class);
 
-        List<SearchResult> list = search.getSearch();
-        sendRequest(base + list.get(0).getTitle());
+        if(search.getSearch() != null) {
+            List<SearchResult> list = search.getSearch();
+            sendRequest(base + list.get(0).getTitle());
+        } else {
+            // Toast Code inspired by https://developer.android.com/guide/topics/ui/notifiers/toasts
+            Toast toast = Toast.makeText(getApplicationContext(), textNotFound, duration);
+            toast.show();
+        }
     }
 
     private void parseJson(String json) {
