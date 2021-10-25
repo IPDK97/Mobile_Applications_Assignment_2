@@ -48,6 +48,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         holder.txtRating.setText(String.valueOf(movieList.get(position).getUserRating()));
         holder.txtYear.setText(String.valueOf(movieList.get(position).getYear()));
         String genre = movieList.get(position).getGenre();
+
         switch (genre) {
             case "Action":
                 holder.imgIcon.setImageResource(R.drawable.ic_action);

@@ -35,6 +35,10 @@ public class Movie implements Serializable {
     @Expose
     private final String plot;
 
+    @SerializedName("Poster")
+    @Expose
+    private String poster;
+
     private double userRating;
     private String notes;
 
@@ -98,5 +102,13 @@ public class Movie implements Serializable {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public String getPoster() {
+        return poster;
+    }
+
+    public void setPoster(String poster) {
+        this.poster = poster;
     }
 }

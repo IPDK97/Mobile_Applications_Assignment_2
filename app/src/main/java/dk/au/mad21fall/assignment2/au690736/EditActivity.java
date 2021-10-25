@@ -9,6 +9,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
+
 import dk.au.mad21fall.assignment2.au690736.model.Movie;
 import dk.au.mad21fall.assignment2.au690736.viewmodel.EditViewModel;
 
@@ -68,32 +70,7 @@ public class EditActivity extends AppCompatActivity {
             }
         });
 
-        switch (movie.getGenre()) {
-            case "Action":
-                imgGenre.setImageResource(R.drawable.ic_action);
-                break;
-            case "Comedy":
-                imgGenre.setImageResource(R.drawable.ic_comedy);
-                break;
-            case "Drama":
-                imgGenre.setImageResource(R.drawable.ic_drama);
-                break;
-            case "Horror":
-                imgGenre.setImageResource(R.drawable.ic_horror);
-                break;
-            case "Romance":
-                imgGenre.setImageResource(R.drawable.ic_romance);
-                break;
-            case "Western":
-                imgGenre.setImageResource(R.drawable.ic_western);
-                break;
-            case "Adventure":
-                imgGenre.setImageResource(R.drawable.ic_adventure);
-                break;
-            default:
-                imgGenre.setImageResource(R.drawable.ic_resource_default);
-                break;
-        }
+        Glide.with(imgGenre.getContext()).load(movie.getPoster()).into(imgGenre);
 
         btnSave.setOnClickListener(v -> saveData());
         btnCancel.setOnClickListener(v -> cancel());
